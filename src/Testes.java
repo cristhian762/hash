@@ -45,11 +45,9 @@ public class Testes {
     public static void main(String[] args) {
         TabPessoas tabP = new TabPessoas();
         
-        LocalTime time = LocalTime.now();
         
-        System.out.println(time);
         
-//        tabP.load("agenda.csv");
-        //teste1();
+        tabP.load("agenda10Mil.csv");
+//        teste1();
     }
 }

@@ -1,10 +1,12 @@
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.time.LocalTime;
+import java.util.Random;
 
 public class TabPessoas {
 
-    public static final int MAXTAB = 2999;
+    public static final int MAXTAB = 9999;
     Pessoa[] tab = new Pessoa[MAXTAB];
     int size = 0;
 
@@ -13,18 +15,22 @@ public class TabPessoas {
     }
 
     /**
-     * Fun��o h retorna a posi��o para inserir o registro na tabela hash
+     * Função h retorna a posição para inserir o registro na tabela hash
      *
      * @param s
      * @return
      */
     public int h(String s) {
+        LocalTime time = LocalTime.now();
 
-        int i, soma = 0;
-        for (i = 0; i < s.length(); i++) {
+        int soma = 0;
+        
+        for (int i = 0; i < s.length(); i++) {
             soma += (int) s.charAt(i);
-
         }
+        
+        soma += (int) time.toString().charAt(time.toString().length() - 1);
+
         return soma % MAXTAB;
     }
 
@@ -38,6 +44,9 @@ public class TabPessoas {
         Pessoa p;
         int posicao;
         int i = 0;
+        int qtd_col = 0;
+        int qtd_inst = 0;
+
         try {
             buffreader = new BufferedReader(new FileReader(nomearq));
             String entrada, reg[];
@@ -51,8 +60,10 @@ public class TabPessoas {
                 p.setPais(reg[3]);
                 posicao = h(p.getNome());
                 if (this.tab[posicao] != null) {
-                    System.out.println("Houve uma colisão na posição " + posicao);
+//                    System.out.println("Houve uma colisão na posição " + posicao);
+                    qtd_col++;
                 } else {
+                    qtd_inst++;
                     this.tab[posicao] = p;
                     i++;
                 }
@@ -62,6 +73,10 @@ public class TabPessoas {
             System.out.println("Arquivo não encontrado");
             //e.printStackTrace();
         }
+        
+        System.out.println("Quantidade de colisões: " + qtd_col);
+        System.out.println("Quantidade de inserções: " + qtd_inst);
+        System.out.println("Percentual de colisões: " + ((float ) qtd_col/(qtd_col + qtd_inst) * 100.0) + "%");
     }
 
     /**
